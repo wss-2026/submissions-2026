@@ -32,9 +32,9 @@ for f in $CHANGED; do
 
   gh api "repos/${AUTOGRADER_REPO}/dispatches" \
     -f event_type=new-submission \
-    -F "client_payload[week]=${WEEK}" \
-    -F "client_payload[student_id]=${STUDENT_ID}" \
-    -F "client_payload[repo_url]=${REPO_URL}" \
-    -F "client_payload[commit_sha]=${COMMIT_SHA}" \
-    -F "client_payload[deploy_url]=${DEPLOY_URL}"
+    -f "client_payload[week]=${WEEK}" \
+    -f "client_payload[student_id]=${STUDENT_ID}" \
+    -f "client_payload[repo_url]=${REPO_URL}" \
+    -f "client_payload[commit_sha]=${COMMIT_SHA}" \
+    -f "client_payload[deploy_url]=${DEPLOY_URL}"
 done
