@@ -1,0 +1,22 @@
+name: Validate submission format
+
+# fork에서 온 PR에서도 안전하게 실행됩니다:
+# - pull_request 트리거는 기본적으로 시크릿에 접근할 수 없습니다.
+# - 이 워크플로우는 학생이 제출한 JSON "내용"을 절대 실행(eval/exec)하지 않고,
+#   형식만 읽어서 검사합니다.
+on:
+  pull_request:
+    paths:
+      - "submissions/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate submission JSON files
+        run: python3 .github/scripts/validate_submission.py

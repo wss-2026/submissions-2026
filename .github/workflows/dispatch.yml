@@ -1,0 +1,27 @@
+name: Dispatch autograder on merge
+
+# 이 워크플로우는 main 브랜치에 push된 뒤(=PR이 merge된 뒤)에만 실행됩니다.
+# main은 브랜치 보호 규칙으로 "직접 push 금지 + validate 체크 통과 필수"로 설정하세요.
+# 그래야 이 워크플로우 파일 자체를 학생이 임의로 바꿔서 실행시키는 것이 불가능합니다
+# (PR 단계에서는 이 워크플로우가 아예 실행되지 않고, validate.yml만 실행됩니다).
+on:
+  push:
+    branches: [main]
+    paths:
+      - "submissions/**"
+
+permissions:
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Dispatch changed submissions to autograder repo
+        env:
+          GH_TOKEN: ${{ secrets.AUTOGRADER_DISPATCH_TOKEN }}
+        run: bash .github/scripts/dispatch_changed.sh

@@ -1,0 +1,7 @@
+{
+  "student_id": "00000000",
+  "name": "홍길동(예시 — 실제 제출 시 이 파일은 참고만 하고 새 파일을 만드세요)",
+  "repo_url": "https://github.com/example-user/websecprog-week03",
+  "commit_sha": "0000000000000000000000000000000000000",
+  "deploy_url": "https://example-week03.vercel.app"
+}
