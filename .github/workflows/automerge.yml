@@ -1,0 +1,47 @@
+name: Auto-merge validated submissions
+
+# 학생 제출 PR을 사람이 일일이 merge하지 않아도 되도록, submissions/** 를 건드리는
+# PR에 GitHub의 네이티브 Auto-merge를 자동으로 켭니다. 실제 merge는 이 워크플로우가
+# 직접 하지 않습니다 — branch protection에 등록된 필수 상태 체크(validate.yml의
+# "validate" job)가 통과해야만 GitHub이 그 시점에 알아서 merge를 완료합니다.
+#
+# pull_request_target을 쓰는 이유: 학생의 fork에서 온 PR이라도, 이 이벤트는
+# base 저장소(main)에 저장된 이 워크플로우 파일 그대로 실행되고 쓰기 권한이 있는
+# 토큰을 받습니다 — 그래야 fork PR에 대해 merge 권한을 행사할 수 있습니다.
+#
+# 안전 원칙: 이 워크플로우는 학생이 제출한 fork의 코드나 JSON "내용"을 절대
+# checkout/실행(eval/exec)하지 않습니다. 아래 두 단계 모두 GitHub API가 돌려주는
+# 메타데이터(어떤 파일이 몇 개, 어떻게 바뀌었는지)만 읽습니다. 실제로 학생이 낸
+# repo_url/commit_sha 값이 올바른지는 validate.yml(형식 검증)과, merge 이후
+# autograder-2026 레포에서 도는 채점 스크립트가 각자의 책임 범위에서 확인합니다.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "submissions/**"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout base repo (이 레포에 커밋된 워크플로우/스크립트만 — 학생 fork 코드는 checkout하지 않음)
+        uses: actions/checkout@v4
+
+      - name: PR이 제출 파일 1개만 정상적으로 추가/수정하는지 확인
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" \
+            | python3 .github/scripts/check_pr_scope.py
+
+      - name: Auto-merge 활성화 (실제 merge는 validate 체크 통과 후 GitHub이 자동으로 수행)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr merge "${{ github.event.pull_request.number }}" \
+            --repo "${{ github.repository }}" \
+            --auto --squash
