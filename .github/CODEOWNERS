@@ -1,4 +1,4 @@
 # .github/ 아래 (워크플로우, 검증/dispatch 스크립트)는 항상 강사/조교 리뷰를 거치도록 강제합니다.
 # 브랜치 보호 규칙에서 "Require review from Code Owners"를 켜야 실제로 적용됩니다.
 # TODO: 아래 계정을 실제 강사/조교 GitHub 계정으로 바꾸세요.
-/.github/ @INSTRUCTOR_GITHUB_ID
+/.github/ @lbcsultan
