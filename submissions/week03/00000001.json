@@ -1,0 +1,7 @@
+{
+  "student_id": "00000001",
+  "name": "테스트2(공개 레포로 파이프라인 성공 경로 점검용)",
+  "repo_url": "https://github.com/octocat/Hello-World",
+  "commit_sha": "7fd1a60b01f91b314f59955a4e4d4e80d8edf11d",
+  "deploy_url": "https://nextjs.org"
+}
