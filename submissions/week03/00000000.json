@@ -1,7 +1,0 @@
-{
-  "student_id": "00000000",
-  "name": "테스트(자동채점 파이프라인 점검용 — 병합 후 삭제 예정)",
-  "repo_url": "https://github.com/wss-2026/websecprog",
-  "commit_sha": "abbdd2bbdd42cc8b0cd30afa6ccb5dd9cc77c902",
-  "deploy_url": "https://nextjs.org"
-}
